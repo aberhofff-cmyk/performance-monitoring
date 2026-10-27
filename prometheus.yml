@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Метрики контейнеров (Telegraf docker input -> prometheus_client)
+  - job_name: telegraf
+    static_configs:
+      - targets: ['telegraf:9273']
+
+  # Метрики хоста. job="node" и instance="node-exporter:9100"
+  # зашиты в запросах дашборда — не переименовывать!
+  - job_name: node
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # (опционально) метрики самого приложения — см. шаг 5 в инструкции
+  # - job_name: app
+  #   metrics_path: /metrics
+  #   static_configs:
+  #     - targets: ['app1:8000', 'app2:8000', 'app3:8000']
